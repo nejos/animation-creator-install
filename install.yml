@@ -1,0 +1,43 @@
+- hosts: web_nodes
+  tasks:
+    - name: "install common help"
+      yum:
+        name: "{{ item }}"
+        state: present
+      become: yes
+      with_items:
+        - "git"
+        - "mc"
+        - "python36"
+        - "python36-pip"
+    - name: "set commit author"
+      raw: "git config --global user.{{ item.key }} '{{ item.value }}'"
+      with_items:
+        - {key: "email", value: "pawel.rachwal@outlook.com"}
+        - {key: "name", value: "Paweł Rachwał"}
+    - name: "sync repo"
+      git:
+        repo: https://github.com/pawelrachwal/animation-creator.git
+        dest: ~/animation-creator
+    - name: "install python deps"
+      pip:
+        name: "{{ item }}"
+        executable: pip-3.6
+      become: yes
+      with_items:
+        - "boto3"
+        - "pytest"
+        - "flask"
+        - "flask_bootstrap"
+    - name: "Sys var PYTHONPATH"
+      lineinfile:
+         path: ~/.bashrc
+         line: "export PYTHONPATH=/home/ec2-user/animation-creator"
+    - name: "Sys var bucket name"
+      lineinfile:
+         path: ~/.bashrc
+         line: "export APP_BUCKET_NAME=181182"
+    - name: "Add queue"
+      lineinfile:
+         path: ~/.bashrc
+         line: "export APP_QUEUE_NAME=181182"      
