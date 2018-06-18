@@ -13,11 +13,11 @@
     - name: "set commit author"
       raw: "git config --global user.{{ item.key }} '{{ item.value }}'"
       with_items:
-        - {key: "email", value: "pawel.rachwal@outlook.com"}
-        - {key: "name", value: "Paweł Rachwał"}
+        - {key: "email", value: "szymon.nn@gmail.com"}
+        - {key: "name", value: "Szymon Nitecki"}
     - name: "sync repo"
       git:
-        repo: https://github.com/pawelrachwal/animation-creator.git
+        repo: https://github.com/nejos/animation-creator.git
         dest: ~/animation-creator
     - name: "install python deps"
       pip:
